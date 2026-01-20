@@ -44,7 +44,7 @@ docker compose -f docker-compose.prod.yml up -d
 Contributions are welcome! Whether it's adding support for French/Dutch mortgage rules or improving the UI, please feel free to open a Pull Request.
 ## ⚖️ License
 
-This project is licensed under the PolyForm Noncommercial License 1.0.0.
+This project is licensed under the **PolyForm Noncommercial License 1.0.0**.
 
 * ✅ Free for Individuals: Use it for your own house hunting, personal research, or education.
 
