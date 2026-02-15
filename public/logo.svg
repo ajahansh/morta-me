@@ -1,0 +1,28 @@
+<svg width="100" height="100" viewBox="0 0 100 100" fill="none" xmlns="http://www.w3.org/2000/svg">
+  <defs>
+    <linearGradient id="logo-gradient" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#4F46E5" />
+      <stop offset="100%" stop-color="#818CF8" />
+    </linearGradient>
+  </defs>
+
+  <path 
+    d="M20 40L50 15L80 40V80C80 82.2091 78.2091 84 76 84H24C21.7909 84 20 82.2091 20 80V40Z" 
+    stroke="url(#logo-gradient)" 
+    stroke-width="6" 
+    stroke-linejoin="round"
+  />
+
+  <path 
+    class="wealth-line"
+    d="M35 65L48 52L58 62L75 35" 
+    stroke="#4F46E5" 
+    stroke-width="6" 
+    stroke-linecap="round" 
+    stroke-linejoin="round"
+  />
+
+  <circle cx="75" cy="35" r="4" fill="#4F46E5" />
+
+  <rect x="38" y="81" width="24" height="6" rx="3" fill="#E2E8F0" />
+</svg>
