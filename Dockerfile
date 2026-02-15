@@ -1,8 +1,8 @@
 # --- Stage 1: Build ---
-FROM node:22-alpine AS build-stage
+FROM node:lts-alpine AS build-stage
 WORKDIR /app
-COPY package*.json ./
-RUN npm install
+COPY package.json ./
+RUN npm install --no-package-lock
 COPY . .
 
 # --- Stage 2: Development ---

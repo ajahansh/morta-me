@@ -22,18 +22,7 @@ docker compose -f docker-compose.dev.yml up --build
 ```
 Access the app at http://localhost:5173
 
-### Production (Self-Hosted)
-
-To deploy to your own server with Let's Encrypt SSL:
-
-1. **Update** `nginx/production.conf` with your domain (e.g., `morta.me`).
-2. **Run the initial SSL setup:**
-
-```bash
-docker compose -f docker-compose.prod.yml run --rm certbot certonly --webroot --webroot-path /var/www/certbot -d morta.me
-```
-
-3. **Start the production stack:**
+**Start the production stack:**
 
 ```bash
 docker compose -f docker-compose.prod.yml up -d
@@ -41,16 +30,18 @@ docker compose -f docker-compose.prod.yml up -d
 
 ## 🤝 Contributing
 
-Contributions are welcome! Whether it's adding support for French/Dutch mortgage rules or improving the UI, please feel free to open a Pull Request.
-## ⚖️ License
+Contributions are welcome! Whether it's adding support for French/Dutch mortgage rules, adding other regions or improving the UI, please feel free to open a Pull Request.
 
-This project is licensed under the **PolyForm Noncommercial License 1.0.0**.
+## ⚖️ License & Adoption
 
-* ✅ Free for Individuals: Use it for your own house hunting, personal research, or education.
+MortaMe is currently transitioning to a **Dual-License Model** to ensure the project remains sustainable while staying free for the public.
 
-* ✅ Free for Non-Profits: Open to NGOs and educational institutions.
+* **For Individuals & Non-Profits:** **Free Forever**. Use it for your own house hunting, research, or education. If the tool helped you, donations are encouraged to keep the servers running.
+* **For Banks & Financial Institutions:** 
+    * **Standard:** Free to use "as-is" with original MortaMe branding.
+    * **Partner Tier (White-Label):** Requires a commercial commitment to remove MortaMe branding or add custom corporate logos.
 
-* ❌ Commercial Use: Use by banks, real estate agencies, or for-profit mortgage brokers requires a commercial license.
-
-**Are you a bank or financial institution?** Please reach out via GitHub to discuss commercial licensing:  
+**Are you a bank or financial institution?** Please reach out via GitHub to discuss commercial licensing or white-label integration:  
 [![Contact me on GitHub](https://img.shields.io/badge/Contact-GitHub-blue?style=for-the-badge&logo=github)](https://github.com/ajahansh)
+
+*Note: For-profit use without attribution is strictly prohibited under our current terms.*

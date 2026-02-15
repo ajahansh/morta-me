@@ -1,0 +1,7 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+input[type='range'] {
+    @apply h-2 bg-gray-200 rounded-lg appearance-none cursor-pointer;
+}

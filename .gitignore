@@ -1,0 +1,21 @@
+# Dependencies
+node_modules/
+dist/
+
+# Env & Secrets
+.env
+.env.*
+!.env.example
+
+# Docker
+.docker
+*.log
+
+# Editor
+.vscode/
+.idea/
+*.suo
+*.ntvs*
+*.njsproj
+*.sln
+*.sw?
