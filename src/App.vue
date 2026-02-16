@@ -24,6 +24,10 @@ const notaryVAT = ref(740)
 const adminFees = ref(350)    
 const cancellationFine = ref(1.0)
 
+// --- TAX REFUND NETHERLANDS ---
+const taxRefundEnabled = ref(true)
+const incomeTaxBracket = ref(36.97) // Standard NL bracket
+
 // --- ANIMATION STATE ---
 // This object holds the numbers currently visible to the user
 const display = reactive({
@@ -73,22 +77,54 @@ const lossFreeResale = computed(() => {
   return propertyPrice.value + buyFees + sellFees + bankPenalty
 })
 
-// --- GSAP TWEENING LOGIC ---
-// This watches the math and "rolls" the numbers smoothly
-watch([totalUpfront, monthlyPayment, lossFreeResale, avgMonthlyPrincipal, avgMonthlyInterest], (newVals) => {
-  gsap.to(display, {
-    duration: 0.5,
-    ease: "power2.out",
-    upfront: newVals[0],
-    monthly: newVals[1],
-    resale: newVals[2],
-    principal: newVals[3],
-    interest: newVals[4]
-  })
-}, { immediate: true })
+// --- EXTRA MATH NETHERLANDS ---
+const monthlyTaxRefund = computed(() => {
+  if (selectedCountry.value !== 'NL' || !taxRefundEnabled.value) return 0
+  // Interest * Tax Bracket = Refund
+  return avgMonthlyInterest.value * (incomeTaxBracket.value / 100)
+})
 
-const format = (v) => Math.round(v).toLocaleString('de-DE') // to be changed according to locale in the future
-const formatDec = (v) => v.toLocaleString('de-DE', { minimumFractionDigits: 2, maximumFractionDigits: 2 })
+const netMonthlyPayment = computed(() => monthlyPayment.value - monthlyTaxRefund.value)
+
+
+// --- DYNAMIC LOCALIZATION ---
+const format = (v) => {
+  const locale = currentEngine.value.locale || 'de-DE'
+  return Math.round(v).toLocaleString(locale)
+}
+
+const formatDec = (v) => {
+  const locale = currentEngine.value.locale || 'de-DE'
+  return v.toLocaleString(locale, { 
+    minimumFractionDigits: 2, 
+    maximumFractionDigits: 2 
+  })
+}
+
+// --- GSAP TWEENING LOGIC ---
+watch(
+  [totalUpfront, monthlyPayment, lossFreeResale, avgMonthlyPrincipal, avgMonthlyInterest, netMonthlyPayment], 
+  (newVals) => {
+    // Determine if we should animate to the Gross or Net monthly payment
+    const targetMonthly = (selectedCountry.value === 'NL' && taxRefundEnabled.value) 
+      ? newVals[5] // netMonthlyPayment
+      : newVals[1]; // monthlyPayment
+
+    // Kill any active animations on 'display' to prevent "glitching"
+    gsap.killTweensOf(display);
+
+    gsap.to(display, {
+      duration: 0.5,
+      ease: "power2.out",
+      upfront: newVals[0],
+      monthly: targetMonthly,
+      resale: newVals[2],
+      principal: newVals[3],
+      interest: newVals[4]
+    });
+  }, 
+  { immediate: true }
+);
 </script>
 
 <template>
@@ -206,8 +242,12 @@ const formatDec = (v) => v.toLocaleString('de-DE', { minimumFractionDigits: 2, m
             
             <div class="summary-card-light">
               <span class="summary-label-indigo"><Calendar :size="16"/> Monthly Payment</span>
-              <h2 class="summary-value-dark">€{{ formatDec(display.monthly) }}</h2>
-              <p class="summary-footer-dark">Full Amortization at {{ annualRate }}%</p>
+              <h2 class="summary-value-dark">
+                €{{ formatDec(taxRefundEnabled && selectedCountry === 'NL' ? netMonthlyPayment : display.monthly) }}
+              </h2>
+              <p class="summary-footer-dark">
+                {{ taxRefundEnabled && selectedCountry === 'NL' ? 'Net Payment after Tax Credit' : `Full Amortization at ${annualRate}%` }}
+              </p>
             </div>
           </div>
 
@@ -250,7 +290,35 @@ const formatDec = (v) => v.toLocaleString('de-DE', { minimumFractionDigits: 2, m
                 </div>
               </div>
             </div>
-
+            <div v-if="selectedCountry === 'NL'" class="tax-card bg-emerald-50/30 border-emerald-100 mt-6">
+              <div class="flex items-center justify-between">
+                  <div class="flex items-center gap-3">
+                    <div class="p-2 bg-emerald-100 rounded-lg text-emerald-600">
+                      <Target :size="18" />
+                    </div>
+                    <div>
+                      <label class="tiny-label-indigo !text-emerald-600">Tax Credit (Hypotheekrenteaftrek)</label>
+                      <p class="text-[10px] font-bold text-slate-400 uppercase">Deduct interest from income tax</p>
+                    </div>
+                  </div>
+                  <button 
+                    @click="taxRefundEnabled = !taxRefundEnabled"
+                    class="w-12 h-6 rounded-full transition-colors relative"
+                    :class="taxRefundEnabled ? 'bg-emerald-500' : 'bg-slate-300'"
+                  >
+                    <div 
+                      class="absolute top-1 bg-white w-4 h-4 rounded-full transition-all"
+                      :class="taxRefundEnabled ? 'left-7' : 'left-1'"
+                    ></div>
+                  </button>
+              </div>  
+              <div v-if="taxRefundEnabled" class="mt-4 pt-4 border-t border-emerald-100/50">
+                <div class="flex justify-between items-center">
+                  <span class="text-[11px] font-black text-slate-500 uppercase">Estimated Refund:</span>
+                  <span class="text-emerald-600 font-serif font-bold text-lg">€{{ formatDec(monthlyTaxRefund) }} /mo</span>
+                </div>
+              </div>
+            </div>
             <div class="pt-10 border-t grid sm:grid-cols-2 gap-10">
               <div class="cost-stat">
                 <div class="icon-circle-rose"><Landmark :size="24"/></div>

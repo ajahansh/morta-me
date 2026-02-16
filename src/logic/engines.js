@@ -2,6 +2,7 @@ export const Engines = {
     BE: {
         name: "Belgium",
         code: "BE",
+        locale: "de-BE", // For formatting
         flag: "https://flagcdn.com/w80/be.png",
         currency: "€",
         calculateMonthlyRate: (annualRate) => annualRate > 0 ? Math.pow(1 + annualRate / 100, 1 / 12) - 1 : 0,
@@ -18,9 +19,31 @@ export const Engines = {
             { id: 'be_custom', label: 'Custom %', rate: null }
         ]
     },
+    NL: {
+        name: "Netherlands",
+        code: "NL",
+        locale: "nl-NL",
+        flag: "https://flagcdn.com/w80/nl.png",
+        currency: "€",
+        // Netherlands uses nominal rate divided by 12
+        calculateMonthlyRate: (annualRate) => annualRate > 0 ? (annualRate / 100) / 12 : 0,
+        maxLTV: 1.00,
+        labels: {
+            misc: "Kadaster / Notar",
+            tax: "Overdrachtsbelasting",
+            regTitle: "Transfer Tax"
+        },
+        defaultTaxes: [
+            { id: 'nl_std', label: 'Standard - 2%', rate: 0.02 },
+            { id: 'nl_starter', label: 'Starter (Exempt) - 0%', rate: 0.00 },
+            { id: 'nl_invest', label: 'Investor - 10.4%', rate: 0.104 },
+            { id: 'nl_custom', label: 'Custom %', rate: null }
+        ]
+    },
     FR: {
         name: "France",
         code: "FR",
+        locale: "fr-FR",
         flag: "https://flagcdn.com/w80/fr.png",
         currency: "€",
         calculateMonthlyRate: (annualRate) => annualRate > 0 ? (annualRate / 100) / 12 : 0,
