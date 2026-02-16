@@ -169,7 +169,14 @@ watch(
                 <h3 class="fancy-title"><Landmark :size="20"/> Loan Terms</h3>
                 <div class="control-card">
                   <div class="flex justify-between items-end mb-4">
-                    <label class="tiny-label">Loan Amount</label>
+                    <label class="tiny-label flex items-center gap-1 group relative cursor-help">
+                      Loan Amount
+                      <Info :size="12" class="text-slate-300 group-hover:text-indigo-500 transition-colors" />
+                      <div class="custom-tooltip">
+                        <p class="font-black mb-1 uppercase text-[9px] text-indigo-400">Borrowing Rules</p>
+                        {{ currentEngine.regulations[0]?.value }}
+                      </div>
+                    </label>
                     <div class="flex items-center font-serif text-2xl font-bold text-indigo-600">
                       €<input type="number" v-model="loanAmount" class="inline-input w-36">
                     </div>
@@ -188,14 +195,7 @@ watch(
                         <label>Duration</label>
                         <span class="text-sm font-black text-indigo-600">{{ durationYears }} Years</span>
                       </div>
-                      <input 
-                        type="range" 
-                        v-model.number="durationYears" 
-                        min="5" 
-                        max="25" 
-                        step="1" 
-                        class="range-slider mt-2"
-                      >
+                      <input type="range" v-model.number="durationYears" min="5" max="25" step="1" class="range-slider mt-2">
                       <div class="flex justify-between mt-1 text-[8px] font-black text-slate-400 uppercase tracking-tighter">
                         <span>5y</span>
                         <span>25y</span>
@@ -209,7 +209,14 @@ watch(
               </div>
 
               <div class="space-y-6">
-                <h3 class="fancy-title"><Scale :size="20"/> Notary & Taxes</h3>
+                <h3 class="fancy-title group relative cursor-help">
+                  <Scale :size="20"/> Notary & Taxes
+                  <Info :size="14" class="text-slate-300 group-hover:text-indigo-500" />
+                  <div class="custom-tooltip !left-0 !translate-x-0 w-64">
+                    <p class="font-black mb-1 uppercase text-[9px] text-indigo-400">Regional Regulations</p>
+                    {{ currentEngine.regulations[1]?.value }}
+                  </div>
+                </h3>
                 <div class="tax-card space-y-6">
                   <div class="space-y-2">
                     <label class="tiny-label-indigo">{{ currentEngine.labels.regTitle }}</label>
@@ -234,10 +241,18 @@ watch(
 
         <main class="lg:col-span-7 space-y-6">
           <div class="grid grid-cols-1 sm:grid-cols-2 gap-6">
-            <div class="summary-card-dark">
-              <span class="summary-label"><Wallet :size="16"/> Upfront Capital</span>
+            <div class="summary-card-dark group relative cursor-help">
+              <span class="summary-label flex items-center gap-2">
+                <Wallet :size="16"/> 
+                Upfront Capital
+                <Info :size="14" class="text-white/40 group-hover:text-indigo-300 transition-all" />
+              </span>
               <h2 class="summary-value">€{{ format(display.upfront) }}</h2>
               <p class="summary-footer">Own Deposit + Legal + Bank Fees</p>
+              <div class="custom-tooltip w-full !bottom-4">
+                <p class="font-black mb-1 uppercase text-[9px] text-indigo-400">Cash Breakdown</p>
+                Includes €{{ format(upfrontDeposit) }} deposit, €{{ format(regTax) }} tax, and €{{ format(totalNotaryPayable - regTax) }} in professional fees.
+              </div>
             </div>
             
             <div class="summary-card-light">
@@ -259,7 +274,16 @@ watch(
 
             <div class="grid md:grid-cols-2 gap-12">
               <div class="space-y-4">
-                <span class="label-bold"><Target :size="16" class="text-rose-500"/> Break-Even Price</span>
+                <span class="label-bold flex items-center gap-2 group relative cursor-help">
+                  <Target :size="16" class="text-rose-500"/> 
+                  Break-Even Price
+                  <Info :size="14" class="text-slate-300 group-hover:text-indigo-500 transition-colors" />
+                  
+                  <div class="custom-tooltip w-64">
+                    <p class="font-black mb-1 uppercase text-[9px] text-rose-400">Investment Target</p>
+                    If you sell for this amount, you walk away with €0 loss after paying back the bank and recovering your buying costs.
+                  </div>
+                </span>
                 <div class="highlight-box">
                   <div class="text-4xl font-serif font-black">€{{ format(display.resale) }}</div>
                   <div class="text-[10px] font-black text-slate-400 uppercase tracking-widest mt-2">Required Resale Value</div>
@@ -301,15 +325,8 @@ watch(
                       <p class="text-[10px] font-bold text-slate-400 uppercase">Deduct interest from income tax</p>
                     </div>
                   </div>
-                  <button 
-                    @click="taxRefundEnabled = !taxRefundEnabled"
-                    class="w-12 h-6 rounded-full transition-colors relative"
-                    :class="taxRefundEnabled ? 'bg-emerald-500' : 'bg-slate-300'"
-                  >
-                    <div 
-                      class="absolute top-1 bg-white w-4 h-4 rounded-full transition-all"
-                      :class="taxRefundEnabled ? 'left-7' : 'left-1'"
-                    ></div>
+                  <button @click="taxRefundEnabled = !taxRefundEnabled" class="w-12 h-6 rounded-full transition-colors relative" :class="taxRefundEnabled ? 'bg-emerald-500' : 'bg-slate-300'">
+                    <div class="absolute top-1 bg-white w-4 h-4 rounded-full transition-all" :class="taxRefundEnabled ? 'left-7' : 'left-1'"></div>
                   </button>
               </div>  
               <div v-if="taxRefundEnabled" class="mt-4 pt-4 border-t border-emerald-100/50">
@@ -336,21 +353,16 @@ watch(
               </div>
             </div>
           </div>
-
           <footer class="glossary-panel">
             <h4 class="glossary-header"><Info :size="16"/> Technical Glossary</h4>
             <div class="grid sm:grid-cols-2 gap-12 text-[12px] leading-relaxed">
               <div class="space-y-2">
                 <p class="font-black text-slate-900 uppercase tracking-wider">Upfront Capital</p>
-                <p class="text-slate-500 font-medium">
-                  Total out-of-pocket cash required to finalize the purchase. This includes your down payment (deposit), registration taxes, notary fees, and bank administrative costs.
-                </p>
+                <p class="text-slate-500 font-medium">Total out-of-pocket cash required to finalize the purchase. This includes your down payment (deposit), registration taxes, notary fees, and bank administrative costs.</p>
               </div>
               <div class="space-y-2">
                 <p class="font-black text-slate-900 uppercase tracking-wider">Break-Even Price</p>
-                <p class="text-slate-500 font-medium">
-                  The minimum resale value required to recover your initial investment. It accounts for buying fees, administrative costs, and potential bank penalties incurred if the mortgage is cancelled early.
-                </p>
+                <p class="text-slate-500 font-medium">The minimum resale value required to recover your initial investment. It accounts for buying fees, administrative costs, and potential bank penalties incurred if the mortgage is cancelled early.</p>
               </div>
             </div>
           </footer>
@@ -363,53 +375,40 @@ watch(
 <style scoped>
 @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;600;800&family=Playfair+Display:wght@700;900&display=swap');
 
-/* Logo Animation Logic */
-.logo-animate {
-  transition: transform 0.3s ease;
-}
+/* --- SMART TOOLTIP SYSTEM --- */
+.custom-tooltip { @apply invisible opacity-0 absolute bottom-full left-1/2 -translate-x-1/2 mb-3 w-56 p-4 bg-slate-900/95 backdrop-blur-md text-white text-[11px] leading-relaxed rounded-2xl shadow-2xl transition-all duration-200 z-50 pointer-events-none border border-white/10 font-sans font-medium text-left normal-case tracking-normal; transform: translate(-50%, 10px); }
+.custom-tooltip::after { content: ''; @apply absolute top-full left-1/2 -translate-x-1/2 border-8 border-transparent border-t-slate-900/95; }
+.group:hover .custom-tooltip { @apply visible opacity-100; transform: translate(-50%, 0); }
+.glass-panel, .control-card, .tax-card, .summary-card-dark { overflow: visible !important;}
 
-.group:hover .logo-animate {
-  transform: translateY(-2px);
-}
-
-/* Deep selection to target the path inside the SVG if injected as a component, 
-   or simply rely on the img hover if using <img> tags */
-.wealth-line {
-  transition: all 0.5s cubic-bezier(0.4, 0, 0.2, 1);
-}
-
-.group:hover .wealth-line {
-  stroke: #6366F1; /* Slightly brightens on hover */
-}
-
-/* Typography Headers */
+/* --- LOGO & TYPOGRAPHY --- */
+.logo-animate { transition: transform 0.3s ease; }
+.group:hover .logo-animate { transform: translateY(-2px); }
 .brand-header { font-family: 'Playfair Display', serif; @apply text-5xl font-black text-slate-900 transition-colors; }
 .brand-sub { @apply text-[11px] font-black text-slate-400 uppercase tracking-[0.3em] mt-2; }
 .fancy-title { font-family: 'Playfair Display', serif; @apply text-2xl font-bold text-slate-800 flex items-center gap-3; }
 .fancy-title-large { font-family: 'Playfair Display', serif; @apply text-3xl font-bold text-slate-800; }
 
-/* Navigation */
+/* --- NAVIGATION --- */
 .country-nav { @apply flex p-1 bg-white rounded-xl shadow-lg border border-slate-100; }
 .country-btn { @apply flex items-center gap-2 px-4 py-2 rounded-lg text-[10px] font-bold uppercase tracking-widest text-slate-500 transition-all; }
 .country-btn.active { @apply bg-indigo-600 text-white shadow-md shadow-indigo-200; }
 
-/* Cards & Panels */
+/* --- CARDS & PANELS --- */
 .glass-panel { @apply bg-white backdrop-blur-3xl rounded-[3rem] shadow-[0_25px_50px_-12px_rgba(0,0,0,0.08)] border border-white relative; }
 .glass-panel-flat { @apply bg-white rounded-[3.5rem] shadow-2xl border border-slate-50; }
 .panel-tag { @apply absolute -top-3 left-10 px-4 py-1 bg-indigo-600 text-white text-[9px] font-black uppercase tracking-widest rounded-full; }
 
-/* Inputs */
+/* --- INPUTS --- */
 .value-hero { @apply p-8 bg-slate-50 rounded-[2.5rem] border border-transparent focus-within:border-indigo-100 transition-all; }
 .value-hero label { @apply text-[10px] font-black text-slate-400 uppercase tracking-widest block mb-2; }
 .currency { font-family: 'Playfair Display', serif; @apply text-4xl font-bold text-indigo-600 mr-3; }
 .hero-input { font-family: 'Playfair Display', serif; @apply w-full bg-transparent text-5xl font-black outline-none text-slate-900; }
-
 .control-card { @apply p-6 bg-white rounded-3xl border border-slate-100; }
 .inline-input { @apply bg-transparent outline-none ml-1 text-right; }
 .input-cell { @apply flex flex-col p-4 bg-slate-50 rounded-2xl border border-transparent transition-all hover:bg-white hover:border-slate-100; }
 .input-cell label { @apply text-[9px] font-black text-slate-500 uppercase mb-1; }
 .input-cell input { @apply bg-transparent font-bold text-lg outline-none text-slate-900; }
-.input-cell input[type="range"] { @apply cursor-pointer accent-indigo-600; padding: 0; height: 1.5rem; }
 .tax-card { @apply p-8 bg-indigo-50/30 rounded-[2.5rem] border border-indigo-100; }
 .select-field { @apply flex-grow p-3 bg-white rounded-xl text-xs font-bold shadow-sm outline-none text-slate-900; }
 .select-field-sm { @apply w-20 p-3 bg-white rounded-xl text-xs font-black shadow-sm outline-none text-center text-slate-900; }
@@ -417,42 +416,31 @@ watch(
 .edit-cell label { @apply text-[9px] font-black text-indigo-400 uppercase; }
 .edit-cell input { @apply w-full bg-white p-3 rounded-xl text-xs font-black outline-none shadow-sm text-slate-900; }
 
-/* Result Cards */
-.summary-card-dark { @apply bg-slate-800 p-10 rounded-[3rem] text-white shadow-2xl relative overflow-hidden; }
+/* --- RESULTS --- */
+.summary-card-dark { background: linear-gradient(135deg, #334155 0%, #1e293b 100%); @apply p-10 rounded-[3rem] text-white shadow-2xl relative overflow-visible border border-slate-600/50; }
 .summary-card-light { @apply bg-white p-10 rounded-[3rem] shadow-xl border border-slate-100; }
 .summary-label { @apply text-[10px] font-black text-indigo-400 uppercase tracking-[0.2em] flex items-center gap-2; }
 .summary-label-indigo { @apply text-[10px] font-black text-indigo-600 uppercase tracking-[0.2em] flex items-center gap-2; }
-.summary-value { font-family: 'Playfair Display', serif; @apply text-5xl font-bold mt-4 tracking-tight; }
-.summary-value-dark { font-family: 'Playfair Display', serif; @apply text-5xl font-bold mt-4 text-slate-900 tracking-tight; }
+.summary-value { font-family: 'Playfair Display', serif; @apply text-5xl font-bold mt-4 tracking-tight; font-variant-numeric: tabular-nums; }
+.summary-value-dark { font-family: 'Playfair Display', serif; @apply text-5xl font-bold mt-4 text-slate-900 tracking-tight; font-variant-numeric: tabular-nums; }
 .summary-footer { @apply mt-6 pt-6 border-t border-white/10 text-[10px] opacity-40 uppercase font-bold; }
 .summary-footer-dark { @apply mt-6 pt-6 border-t border-slate-100 text-[10px] text-slate-400 uppercase font-bold; }
 
-/* Analytics */
+/* --- ANALYTICS --- */
 .highlight-box { @apply p-8 bg-slate-50 rounded-[2.5rem] border border-dashed border-slate-200; }
-.progress-track { @apply w-full h-4 flex rounded-full overflow-hidden bg-slate-100 shadow-inner; }
-.bar-equity { @apply bg-indigo-600 h-full transition-all duration-1000 shadow-[0_0_15px_rgba(79,70,229,0.4)]; }
-.bar-interest { @apply bg-rose-500 h-full transition-all duration-1000; }
-
+.progress-track { @apply w-full flex rounded-full overflow-hidden bg-slate-100 shadow-inner transition-all duration-500; }
+.bar-equity { @apply bg-indigo-600 h-full shadow-[0_0_15px_rgba(79,70,229,0.4)]; }
+.bar-interest { @apply bg-rose-500 h-full; }
 .cost-stat { @apply flex items-center gap-5; }
-.tiny-label { @apply text-[10px] font-black text-slate-400 uppercase block mb-1; }
-.stat-num { font-family: 'Playfair Display', serif; @apply text-2xl font-bold text-slate-900; }
-.stat-num-rose { font-family: 'Playfair Display', serif; @apply text-2xl font-bold text-rose-500; }
+.tiny-label { @apply text-[10px] font-black text-slate-400 uppercase block; }
+.stat-num { font-family: 'Playfair Display', serif; @apply text-2xl font-bold text-slate-900; font-variant-numeric: tabular-nums; }
+.stat-num-rose { font-family: 'Playfair Display', serif; @apply text-2xl font-bold text-rose-500; font-variant-numeric: tabular-nums; }
 .icon-circle-rose { @apply w-14 h-14 rounded-2xl bg-rose-50 flex items-center justify-center text-rose-500; }
 .icon-circle-slate { @apply w-14 h-14 rounded-2xl bg-slate-100 flex items-center justify-center text-slate-400; }
-
 .glossary-panel { @apply p-10 rounded-[3rem] bg-slate-50 border border-slate-100; }
 .glossary-header { @apply text-[10px] font-black mb-6 uppercase text-slate-400 tracking-[0.3em] flex items-center gap-2; }
 
-/* Range Slider */
+/* --- UTILS --- */
 .range-slider { @apply appearance-none w-full h-2 bg-slate-100 rounded-full outline-none; }
 .range-slider::-webkit-slider-thumb { @apply appearance-none w-7 h-7 bg-indigo-600 rounded-full border-4 border-white shadow-xl cursor-pointer hover:scale-110 transition-transform; }
-
-.progress-track { @apply w-full flex rounded-full overflow-hidden bg-slate-100 shadow-inner; transition: all 0.5s ease; }
-.bar-equity { @apply bg-indigo-600 h-full shadow-[0_0_15px_rgba(79,70,229,0.4)]; }
-.bar-interest { @apply bg-rose-500 h-full; }
-
-/* Keep numbers from "wiggling" during count-up */
-.summary-value, .summary-value-dark, .stat-num, .stat-num-rose {
-  font-variant-numeric: tabular-nums;
-}
 </style>
