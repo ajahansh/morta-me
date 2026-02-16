@@ -1,11 +1,22 @@
 <script setup>
-import { ref, computed, watch, reactive, onMounted } from 'vue'
+import { ref, computed, watch, reactive, onMounted, onUnmounted } from 'vue'
 import { Engines } from './logic/engines'
 import gsap from 'gsap'
 import { 
   Wallet, Calendar, Info, Scale, Landmark, 
-  BarChart3, Target, TrendingUp 
+  BarChart3, Target, TrendingUp, Heart,
+  ChevronUp, Zap, Coffee, Globe, QrCode, Smartphone // Added ChevronUp, Smartphone
 } from 'lucide-vue-next'
+
+const showDonationOptions = ref(false)
+const donationRef = ref(null) // For click-outside logic
+const handleClickOutside = (event) => {
+  if (donationRef.value && !donationRef.value.contains(event.target)) {
+    showDonationOptions.value = false
+  }
+}
+onMounted(() => document.addEventListener('click', handleClickOutside))
+onUnmounted(() => document.removeEventListener('click', handleClickOutside))
 
 // --- LOGIC & STATE ---
 const selectedCountry = ref('BE')
@@ -353,17 +364,95 @@ watch(
               </div>
             </div>
           </div>
+          
           <footer class="glossary-panel">
-            <h4 class="glossary-header"><Info :size="16"/> Technical Glossary</h4>
-            <div class="grid sm:grid-cols-2 gap-12 text-[12px] leading-relaxed">
-              <div class="space-y-2">
-                <p class="font-black text-slate-900 uppercase tracking-wider">Upfront Capital</p>
-                <p class="text-slate-500 font-medium">Total out-of-pocket cash required to finalize the purchase. This includes your down payment (deposit), registration taxes, notary fees, and bank administrative costs.</p>
+            <div class="grid lg:grid-cols-3 gap-12 pb-2 -mt-4">
+              <div class="space-y-4">
+                <h4 class="glossary-header"><Info :size="16"/> Open Source</h4>
+                <p class="glossary-text">
+                  MortaMe is an open-source project designed to bring 100% transparency to the mortgage process. No hidden trackers, no lead-generation—just math for your benefit!
+                </p>
+                <a href="https://github.com/ajahansh/morta-me" target="_blank" class="github-link"><svg class="w-5 h-5" viewBox="0 0 24 24" fill="currentColor"><path d="M12 0c-6.626 0-12 5.373-12 12 0 5.302 3.438 9.8 8.207 11.387.599.111.793-.261.793-.577v-2.234c-3.338.726-4.033-1.416-4.033-1.416-.546-1.387-1.333-1.756-1.333-1.756-1.089-.745.083-.729.083-.729 1.205.084 1.839 1.237 1.839 1.237 1.07 1.834 2.807 1.304 3.492.997.107-.775.418-1.305.762-1.604-2.665-.305-5.467-1.334-5.467-5.931 0-1.311.469-2.381 1.236-3.221-.124-.303-.535-1.524.117-3.176 0 0 1.008-.322 3.301 1.23.957-.266 1.983-.399 3.003-.404 1.02.005 2.047.138 3.006.404 2.291-1.552 3.297-1.23 3.297-1.23.653 1.653.242 2.874.118 3.176.77.84 1.235 1.911 1.235 3.221 0 4.609-2.807 5.624-5.479 5.921.43.372.823 1.102.823 2.222v3.293c0 .319.192.694.801.576 4.765-1.589 8.199-6.086 8.199-11.386 0-6.627-5.373-12-12-12z"/></svg></a>
               </div>
-              <div class="space-y-2">
-                <p class="font-black text-slate-900 uppercase tracking-wider">Break-Even Price</p>
-                <p class="text-slate-500 font-medium">The minimum resale value required to recover your initial investment. It accounts for buying fees, administrative costs, and potential bank penalties incurred if the mortgage is cancelled early.</p>
+
+              <div class="space-y-4">
+                <h4 class="glossary-header"><Target :size="16"/> Helpful Tips</h4>
+                <ul class="glossary-text space-y-3">
+                  <li class="flex gap-2">
+                    <span class="text-indigo-500 font-bold">•</span>
+                    <span><strong>LTV Impact:</strong> Lowering your Loan-to-Value below 80% often unlocks better interest rates.</span>
+                  </li>
+                </ul>
               </div>
+
+              <div class="space-y-4">
+                <h4 class="glossary-header"><Landmark :size="16"/> Legal Disclaimer</h4>
+                <p class="glossary-text italic opacity-80">
+                  This simulator is for educational purposes only. Always consult a financial advisor before making any decisions.
+                </p>
+              </div>
+            </div>
+
+            <div class="flex flex-col items-center relative -mt-5" ref="donationRef">
+              <transition name="pop">
+                <div v-if="showDonationOptions" 
+                    class="absolute bottom-full mb-6 w-full max-w-xl bg-white border border-slate-200/60 rounded-[2.5rem] p-6 shadow-dropdown z-50">
+                  <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                    <div class="p-5 space-y-4 bg-slate-50/80 rounded-3xl border border-slate-100">
+                      <p class="text-[10px] font-black text-slate-400 uppercase tracking-widest px-1">Instant Pay</p>
+                      <div class="space-y-3">
+                        <a href="https://revolut.me/ajahansh" target="_blank" class="method-card group">
+                          <Smartphone :size="16" class="text-blue-600" />
+                          <span>Apple / Google Pay</span>
+                        </a>
+                        <a href="https://buymeacoffee.com/ajahansh" target="_blank" class="method-card group">
+                          <Coffee :size="16" class="text-amber-500" />
+                          <span>Buy me a coffee</span>
+                        </a>
+                      </div>
+                    </div>
+
+                    <div class="p-5 space-y-4 bg-slate-50/80 rounded-3xl border border-slate-100">
+                      <p class="text-[10px] font-black text-slate-400 uppercase tracking-widest px-1">Local & Bank</p>
+                      <div class="space-y-3">
+                        <a href="https://wise.com/pay/me/amirj218" target="_blank" class="method-card group">
+                          <Globe :size="16" class="text-emerald-600" />
+                          <span>Wise (Direct)</span>
+                        </a>
+                        <div class="flex gap-3">
+                          <a href="https://pay.bancontact.com/p2p/4fc99ff7-8072-45dc-986b-451a1d1c899a" target="_blank" class="method-card-sm hover:!border-red-200">€6</a>
+                          <a href="https://pay.bancontact.com/p2p/9022067f-49f8-40d5-849a-f70eca99618b" target="_blank" class="method-card-sm hover:!border-red-200">€12 Payconiq</a>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+
+                  <div class="mt-5 pt-4 text-center border-t border-slate-100">
+                    <a href="https://paypal.me/ajahansh" target="_blank" class="paypal-link">
+                      Alternative: <span class="font-bold">PayPal</span>
+                    </a>
+                  </div>
+                </div>
+              </transition>
+
+              <button @click.stop="showDonationOptions = !showDonationOptions" 
+                      class="support-trigger-btn group"
+                      :class="{ 'is-active': showDonationOptions }">
+                
+                <div class="flex items-center gap-3">
+                  <Heart :size="18" 
+                        :class="showDonationOptions ? 'fill-rose-500 text-rose-500' : 'text-slate-400 group-hover:text-rose-500'" 
+                        class="transition-all duration-300" />
+                  <span class="text-[11px] font-black uppercase tracking-[0.2em]">Support the Project</span>
+                  <ChevronUp :size="16" 
+                            :class="{'rotate-180': showDonationOptions}" 
+                            class="transition-transform duration-500 text-slate-300" />
+                </div>
+                
+                <p class="text-[9px] font-bold text-slate-400 mt-1.5 transition-colors group-hover:text-indigo-500">
+                  Made with <span class="text-rose-500 text-[11px]">♥</span> for the community
+                </p>
+              </button>
             </div>
           </footer>
         </main>
@@ -437,10 +526,19 @@ watch(
 .stat-num-rose { font-family: 'Playfair Display', serif; @apply text-2xl font-bold text-rose-500; font-variant-numeric: tabular-nums; }
 .icon-circle-rose { @apply w-14 h-14 rounded-2xl bg-rose-50 flex items-center justify-center text-rose-500; }
 .icon-circle-slate { @apply w-14 h-14 rounded-2xl bg-slate-100 flex items-center justify-center text-slate-400; }
-.glossary-panel { @apply p-10 rounded-[3rem] bg-slate-50 border border-slate-100; }
-.glossary-header { @apply text-[10px] font-black mb-6 uppercase text-slate-400 tracking-[0.3em] flex items-center gap-2; }
-
-/* --- UTILS --- */
 .range-slider { @apply appearance-none w-full h-2 bg-slate-100 rounded-full outline-none; }
 .range-slider::-webkit-slider-thumb { @apply appearance-none w-7 h-7 bg-indigo-600 rounded-full border-4 border-white shadow-xl cursor-pointer hover:scale-110 transition-transform; }
+.glossary-panel { @apply pt-10 pb-4 px-10 md:pt-14 md:pb-8 md:px-14 rounded-[3.5rem] bg-white border border-slate-100 mt-2 shadow-sm; }
+.glossary-text { @apply text-slate-500 text-[12px] leading-relaxed font-medium; }
+.glossary-header { @apply text-[10px] font-black mb-6 uppercase text-slate-400 tracking-[0.3em] flex items-center gap-2; }
+.shadow-dropdown { box-shadow: 0 -20px 50px -12px rgba(0, 0, 0, 0.1), 0 0 1px 1px rgba(0, 0, 0, 0.03); }
+.method-card { @apply flex items-center gap-3 p-4 bg-white border border-slate-200 rounded-2xl text-[11px] font-bold text-slate-700 transition-all duration-200 shadow-[0_2px_4px_rgba(0,0,0,0.02)] hover:border-indigo-400 hover:shadow-xl hover:shadow-indigo-100/50 hover:-translate-y-0.5; }
+.method-card span {@apply flex-grow; }
+.method-card-sm { @apply flex-1 flex items-center justify-center p-4 bg-white border border-slate-200 rounded-2xl text-[10px] font-extrabold text-slate-700 transition-all duration-200 shadow-[0_2px_4px_rgba(0,0,0,0.02)] hover:shadow-xl hover:-translate-y-0.5; }
+.paypal-link { @apply text-[11px] text-slate-500 px-4 py-1.5 rounded-full border border-slate-200 bg-slate-50 transition-all hover:bg-white hover:border-blue-400 hover:text-blue-600; }
+.support-trigger-btn { @apply flex flex-col items-center px-12 py-5 rounded-[2rem] transition-all duration-500 hover:bg-white hover:shadow-2xl hover:shadow-slate-200/50 hover:-translate-y-1; }
+.support-trigger-btn.is-active { @apply bg-slate-900 text-white shadow-2xl shadow-slate-900/20; }
+.pop-leave-active { transition: all 0.2s ease-in; }
+.pop-enter-active { transition: all 0.5s cubic-bezier(0.16, 1, 0.3, 1); }
+.pop-enter-from, .pop-leave-to { opacity: 0; transform: translateY(40px) scale(0.92); }
 </style>
