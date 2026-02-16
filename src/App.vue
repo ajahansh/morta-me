@@ -366,7 +366,7 @@ watch(
           </div>
           
           <footer class="glossary-panel">
-            <div class="grid lg:grid-cols-3 gap-12 pb-2 -mt-4">
+            <div class="grid lg:grid-cols-3 gap-12 pb-0 -mt-4">
               <div class="space-y-4">
                 <h4 class="glossary-header"><Info :size="16"/> Open Source</h4>
                 <p class="glossary-text">
@@ -530,7 +530,7 @@ watch(
 .range-slider::-webkit-slider-thumb { @apply appearance-none w-7 h-7 bg-indigo-600 rounded-full border-4 border-white shadow-xl cursor-pointer hover:scale-110 transition-transform; }
 .glossary-panel { @apply pt-10 pb-4 px-10 md:pt-14 md:pb-8 md:px-14 rounded-[3.5rem] bg-white border border-slate-100 mt-2 shadow-sm; }
 .glossary-text { @apply text-slate-500 text-[12px] leading-relaxed font-medium; }
-.glossary-header { @apply text-[10px] font-black mb-6 uppercase text-slate-400 tracking-[0.3em] flex items-center gap-2; }
+.glossary-header { @apply text-[10px] font-black mb-5 uppercase text-slate-400 tracking-[0.3em] flex items-center gap-2; }
 .shadow-dropdown { box-shadow: 0 -20px 50px -12px rgba(0, 0, 0, 0.1), 0 0 1px 1px rgba(0, 0, 0, 0.03); }
 .method-card { @apply flex items-center gap-3 p-4 bg-white border border-slate-200 rounded-2xl text-[11px] font-bold text-slate-700 transition-all duration-200 shadow-[0_2px_4px_rgba(0,0,0,0.02)] hover:border-indigo-400 hover:shadow-xl hover:shadow-indigo-100/50 hover:-translate-y-0.5; }
 .method-card span {@apply flex-grow; }
