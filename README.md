@@ -1,6 +1,8 @@
 # 🏠 Morta.me
 **The Most Transparent Mortgage Simulator for the European Market.**
 
+**Live Application:** [https://morta.me](https://morta.me)
+
 Morta.me is a high-performance, single-page application (SPA) built with **Vue 3, Vite, and Tailwind CSS**. It empowers homebuyers to simulate complex mortgage scenarios—including variable rates and early repayments—entirely on the client side for maximum privacy and speed.
 
 ## 🇪🇺 Built for Europe (for now)
@@ -36,7 +38,7 @@ Contributions are welcome! Whether it's adding support for French/Dutch mortgage
 
 MortaMe is currently transitioning to a **Dual-License Model** to ensure the project remains sustainable while staying free for the public.
 
-* **For Individuals & Non-Profits:** **Free Forever**. Use it for your own house hunting, research, or education. If the tool helped you, donations are encouraged to keep the servers running.
+* **For Individuals & Non-Profits:** **Free Forever**. Use it for your own house hunting, research, or education. If the tool helped you, [donations](https://morta.me) are encouraged to keep the servers running. 
 * **For Banks & Financial Institutions:** 
     * **Standard:** Free to use "as-is" with original MortaMe branding.
     * **Partner Tier (White-Label):** Requires a commercial commitment to remove MortaMe branding or add custom corporate logos.

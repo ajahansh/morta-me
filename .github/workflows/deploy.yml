@@ -3,6 +3,10 @@ name: Deploy MortaMe
 on:
   push:
     branches: [main]
+    paths-ignore:
+      - '**.md'
+      - 'LICENSE'
+      - '.gitignore'
 
 jobs:
   deploy:
