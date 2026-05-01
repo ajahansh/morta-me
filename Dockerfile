@@ -2,7 +2,7 @@
 FROM node:lts-alpine AS build-stage
 WORKDIR /app
 COPY package.json ./
-RUN npm install --no-package-lock
+RUN npm install --no-package-lock --legacy-peer-deps
 COPY . .
 
 # --- Stage 2: Development ---
